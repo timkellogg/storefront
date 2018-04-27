@@ -12,6 +12,7 @@ import (
 var config = Config{}
 
 func main() {
+	log.Println("Establishing gateway service...")
 	config.Read()
 
 	conn, err := grpc.Dial(config.Address, grpc.WithInsecure())
@@ -29,9 +30,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("identification service failed to get: %v", err)
 	}
-
+	log.Println("Gateway registered identification service client")
 	log.Print(r)
-	// r := mux.NewRouter("/identification/:id", identificationHandler).Methods("GET")
+
+	// r := mux.NewRouter("/api/user", identificationHandler).Methods("GET")
 
 	// r.HandleFunc("/identifications/", identificationHandler).Methods("GET")
 

@@ -5,7 +5,6 @@ import (
 
 	identificationProto "github.com/timkellogg/store/identification/protos/identification"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 // IdentityRepository - collection of identities/users
@@ -23,16 +22,19 @@ const (
 
 // Connect - establish database connection
 func (i *IdentityRepository) Connect() {
+	log.Println("Establishing identification service database connection...")
 	session, err := mgo.Dial(i.Server)
 	if err != nil {
 		log.Fatal(err)
 	}
 	db = session.DB(i.Database)
+	log.Println("Identification service database connection successful")
 }
 
 // FindByID - returns a single identity by id
 func (i *IdentityRepository) FindByID(id string) (identificationProto.Identity, error) {
+	log.Printf("IdentityRepository FindByID: %s", id)
 	var identity identificationProto.Identity
-	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&identity)
+	err := db.C(COLLECTION).FindId(id).One(&identity)
 	return identity, err
 }

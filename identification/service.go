@@ -25,6 +25,7 @@ func init() {
 }
 
 func main() {
+	log.Println("Starting identification service...")
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal(err)
@@ -36,6 +37,6 @@ func main() {
 	reflection.Register(grpcServer)
 	grpcServer.Serve(lis)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Identification service failed: %v", err)
+		log.Fatalf("Identification service failed to start: %v", err)
 	}
 }

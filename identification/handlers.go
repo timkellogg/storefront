@@ -1,17 +1,19 @@
-package identification
+package main
 
-type IdentityService struct{}
+import (
+	"log"
 
-func (i *IdentityService) Authorize() {
+	context "golang.org/x/net/context"
+)
 
+// Server - represents the gRPC server
+type Server struct{}
+
+// Get - find identity by id
+func (s *Server) Get(ctx context.Context, in *GetRequest) (*Identity, error) {
+	identity, err := identityRepository.FindByID(in.Id)
+	if err != nil {
+		log.Println(err)
+	}
+	return &identity, err
 }
-
-// // Get - returns identity
-// func (i *Identity) Get() Response {
-// 	i.Email = "some@email.com"
-// 	return Response{Errors: nil, Identity: i}
-// }
-
-// func ()  {
-
-// }

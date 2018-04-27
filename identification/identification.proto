@@ -1,13 +1,17 @@
 syntax = "proto3";
 
-package identification;
+package main;
 
 service IdentificationService {
-    rpc Create(Identity) returns (Response) {}
-    rpc Get(Identity) returns (Response) {}
-    rpc GetAll(Request) returns (Response) {}
-    rpc Authenticate(Identity) returns (Token) {}
-    rpc ValidateToken(Token) returns (Token) {}
+    rpc Get(GetRequest) returns (Identity) {}
+    // rpc Create(Identity) returns (Response) {}
+    // rpc Get(Identity) returns (Response) {}
+    // rpc Authenticate(Identity) returns (Token) {}
+    // rpc ValidateToken(Token) returns (Token) {}
+}
+
+message GetRequest {
+    string id = 1;
 }
 
 message Identity {
@@ -22,21 +26,20 @@ message Identity {
     }
 }
 
-message Request {}
+// message Request {}
 
-message Response {
-    Identity identity = 1;
-    repeated Identity identities = 2;
-    repeated Error errors = 3;
-}
+// message Response {
+//     Identity identity = 1;
+//     repeated Error errors = 3;
+// }
 
-message Token {
-    string token = 1;
-    bool valid = 2;
-    repeated Error errors = 3;
-}
+// message Token {
+//     string token = 1;
+//     bool valid = 2;
+//     repeated Error errors = 3;
+// }
 
-message Error {
-    int32 code = 1;
-    string description = 2;
-}
+// message Error {
+//     int32 code = 1;
+//     string description = 2;
+// }

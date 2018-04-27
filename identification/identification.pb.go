@@ -2,19 +2,16 @@
 // source: identification.proto
 
 /*
-Package identification is a generated protocol buffer package.
+Package main is a generated protocol buffer package.
 
 It is generated from these files:
 	identification.proto
 
 It has these top-level messages:
+	GetRequest
 	Identity
-	Request
-	Response
-	Token
-	Error
 */
-package identification
+package main
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
@@ -58,7 +55,23 @@ var Identity_Type_value = map[string]int32{
 func (x Identity_Type) String() string {
 	return proto.EnumName(Identity_Type_name, int32(x))
 }
-func (Identity_Type) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 0} }
+func (Identity_Type) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{1, 0} }
+
+type GetRequest struct {
+	Id string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+}
+
+func (m *GetRequest) Reset()                    { *m = GetRequest{} }
+func (m *GetRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetRequest) ProtoMessage()               {}
+func (*GetRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+
+func (m *GetRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
 
 type Identity struct {
 	Guid     string `protobuf:"bytes,1,opt,name=guid" json:"guid,omitempty"`
@@ -70,7 +83,7 @@ type Identity struct {
 func (m *Identity) Reset()                    { *m = Identity{} }
 func (m *Identity) String() string            { return proto.CompactTextString(m) }
 func (*Identity) ProtoMessage()               {}
-func (*Identity) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (*Identity) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *Identity) GetGuid() string {
 	if m != nil {
@@ -100,109 +113,10 @@ func (m *Identity) GetPassword() string {
 	return ""
 }
 
-type Request struct {
-}
-
-func (m *Request) Reset()                    { *m = Request{} }
-func (m *Request) String() string            { return proto.CompactTextString(m) }
-func (*Request) ProtoMessage()               {}
-func (*Request) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
-
-type Response struct {
-	Identity   *Identity   `protobuf:"bytes,1,opt,name=identity" json:"identity,omitempty"`
-	Identities []*Identity `protobuf:"bytes,2,rep,name=identities" json:"identities,omitempty"`
-	Errors     []*Error    `protobuf:"bytes,3,rep,name=errors" json:"errors,omitempty"`
-}
-
-func (m *Response) Reset()                    { *m = Response{} }
-func (m *Response) String() string            { return proto.CompactTextString(m) }
-func (*Response) ProtoMessage()               {}
-func (*Response) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
-
-func (m *Response) GetIdentity() *Identity {
-	if m != nil {
-		return m.Identity
-	}
-	return nil
-}
-
-func (m *Response) GetIdentities() []*Identity {
-	if m != nil {
-		return m.Identities
-	}
-	return nil
-}
-
-func (m *Response) GetErrors() []*Error {
-	if m != nil {
-		return m.Errors
-	}
-	return nil
-}
-
-type Token struct {
-	Token  string   `protobuf:"bytes,1,opt,name=token" json:"token,omitempty"`
-	Valid  bool     `protobuf:"varint,2,opt,name=valid" json:"valid,omitempty"`
-	Errors []*Error `protobuf:"bytes,3,rep,name=errors" json:"errors,omitempty"`
-}
-
-func (m *Token) Reset()                    { *m = Token{} }
-func (m *Token) String() string            { return proto.CompactTextString(m) }
-func (*Token) ProtoMessage()               {}
-func (*Token) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
-
-func (m *Token) GetToken() string {
-	if m != nil {
-		return m.Token
-	}
-	return ""
-}
-
-func (m *Token) GetValid() bool {
-	if m != nil {
-		return m.Valid
-	}
-	return false
-}
-
-func (m *Token) GetErrors() []*Error {
-	if m != nil {
-		return m.Errors
-	}
-	return nil
-}
-
-type Error struct {
-	Code        int32  `protobuf:"varint,1,opt,name=code" json:"code,omitempty"`
-	Description string `protobuf:"bytes,2,opt,name=description" json:"description,omitempty"`
-}
-
-func (m *Error) Reset()                    { *m = Error{} }
-func (m *Error) String() string            { return proto.CompactTextString(m) }
-func (*Error) ProtoMessage()               {}
-func (*Error) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
-
-func (m *Error) GetCode() int32 {
-	if m != nil {
-		return m.Code
-	}
-	return 0
-}
-
-func (m *Error) GetDescription() string {
-	if m != nil {
-		return m.Description
-	}
-	return ""
-}
-
 func init() {
-	proto.RegisterType((*Identity)(nil), "identification.Identity")
-	proto.RegisterType((*Request)(nil), "identification.Request")
-	proto.RegisterType((*Response)(nil), "identification.Response")
-	proto.RegisterType((*Token)(nil), "identification.Token")
-	proto.RegisterType((*Error)(nil), "identification.Error")
-	proto.RegisterEnum("identification.Identity_Type", Identity_Type_name, Identity_Type_value)
+	proto.RegisterType((*GetRequest)(nil), "main.GetRequest")
+	proto.RegisterType((*Identity)(nil), "main.Identity")
+	proto.RegisterEnum("main.Identity_Type", Identity_Type_name, Identity_Type_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -216,11 +130,7 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for IdentificationService service
 
 type IdentificationServiceClient interface {
-	Create(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Response, error)
-	Get(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Response, error)
-	GetAll(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-	Authenticate(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Token, error)
-	ValidateToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*Token, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Identity, error)
 }
 
 type identificationServiceClient struct {
@@ -231,45 +141,9 @@ func NewIdentificationServiceClient(cc *grpc.ClientConn) IdentificationServiceCl
 	return &identificationServiceClient{cc}
 }
 
-func (c *identificationServiceClient) Create(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := grpc.Invoke(ctx, "/identification.IdentificationService/Create", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *identificationServiceClient) Get(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := grpc.Invoke(ctx, "/identification.IdentificationService/Get", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *identificationServiceClient) GetAll(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := grpc.Invoke(ctx, "/identification.IdentificationService/GetAll", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *identificationServiceClient) Authenticate(ctx context.Context, in *Identity, opts ...grpc.CallOption) (*Token, error) {
-	out := new(Token)
-	err := grpc.Invoke(ctx, "/identification.IdentificationService/Authenticate", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *identificationServiceClient) ValidateToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*Token, error) {
-	out := new(Token)
-	err := grpc.Invoke(ctx, "/identification.IdentificationService/ValidateToken", in, out, c.cc, opts...)
+func (c *identificationServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*Identity, error) {
+	out := new(Identity)
+	err := grpc.Invoke(ctx, "/main.IdentificationService/Get", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -279,37 +153,15 @@ func (c *identificationServiceClient) ValidateToken(ctx context.Context, in *Tok
 // Server API for IdentificationService service
 
 type IdentificationServiceServer interface {
-	Create(context.Context, *Identity) (*Response, error)
-	Get(context.Context, *Identity) (*Response, error)
-	GetAll(context.Context, *Request) (*Response, error)
-	Authenticate(context.Context, *Identity) (*Token, error)
-	ValidateToken(context.Context, *Token) (*Token, error)
+	Get(context.Context, *GetRequest) (*Identity, error)
 }
 
 func RegisterIdentificationServiceServer(s *grpc.Server, srv IdentificationServiceServer) {
 	s.RegisterService(&_IdentificationService_serviceDesc, srv)
 }
 
-func _IdentificationService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Identity)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IdentificationServiceServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/identification.IdentificationService/Create",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IdentificationServiceServer).Create(ctx, req.(*Identity))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _IdentificationService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Identity)
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -318,91 +170,21 @@ func _IdentificationService_Get_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/identification.IdentificationService/Get",
+		FullMethod: "/main.IdentificationService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IdentificationServiceServer).Get(ctx, req.(*Identity))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IdentificationService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IdentificationServiceServer).GetAll(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/identification.IdentificationService/GetAll",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IdentificationServiceServer).GetAll(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IdentificationService_Authenticate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Identity)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IdentificationServiceServer).Authenticate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/identification.IdentificationService/Authenticate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IdentificationServiceServer).Authenticate(ctx, req.(*Identity))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _IdentificationService_ValidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Token)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(IdentificationServiceServer).ValidateToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/identification.IdentificationService/ValidateToken",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IdentificationServiceServer).ValidateToken(ctx, req.(*Token))
+		return srv.(IdentificationServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 var _IdentificationService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "identification.IdentificationService",
+	ServiceName: "main.IdentificationService",
 	HandlerType: (*IdentificationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _IdentificationService_Create_Handler,
-		},
-		{
 			MethodName: "Get",
 			Handler:    _IdentificationService_Get_Handler,
-		},
-		{
-			MethodName: "GetAll",
-			Handler:    _IdentificationService_GetAll_Handler,
-		},
-		{
-			MethodName: "Authenticate",
-			Handler:    _IdentificationService_Authenticate_Handler,
-		},
-		{
-			MethodName: "ValidateToken",
-			Handler:    _IdentificationService_ValidateToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -412,31 +194,20 @@ var _IdentificationService_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("identification.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 401 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0x4d, 0x8f, 0xd3, 0x30,
-	0x10, 0x6d, 0x92, 0x26, 0xa4, 0xb3, 0x0b, 0xaa, 0x46, 0xbb, 0x22, 0xda, 0x53, 0x95, 0x13, 0x42,
-	0x62, 0x0f, 0x0b, 0x07, 0x24, 0xb4, 0xa0, 0x68, 0xa9, 0xaa, 0x1e, 0x0a, 0x92, 0x9b, 0x72, 0x4f,
-	0x93, 0x01, 0x2c, 0xd2, 0x38, 0xd8, 0x6e, 0x51, 0xff, 0x05, 0x7f, 0x83, 0x5f, 0xc4, 0xdf, 0x41,
-	0x76, 0xd2, 0xaa, 0x1f, 0xb4, 0x12, 0xdc, 0x66, 0xde, 0xbc, 0x67, 0x7b, 0xde, 0x4b, 0xe0, 0x8a,
-	0x17, 0x54, 0x69, 0xfe, 0x99, 0xe7, 0x99, 0xe6, 0xa2, 0xba, 0xad, 0xa5, 0xd0, 0x02, 0x9f, 0xec,
-	0xa3, 0xf1, 0x4f, 0x07, 0xc2, 0xb1, 0x85, 0xf4, 0x1a, 0x11, 0xba, 0x5f, 0x96, 0xbc, 0x88, 0x9c,
-	0x81, 0xf3, 0xac, 0xc7, 0x6c, 0x6d, 0xb0, 0x2a, 0x5b, 0x50, 0xe4, 0x36, 0x98, 0xa9, 0xf1, 0x0a,
-	0x7c, 0x5a, 0x64, 0xbc, 0x8c, 0x3c, 0x0b, 0x36, 0x0d, 0xde, 0x40, 0x58, 0x67, 0x4a, 0xfd, 0x10,
-	0xb2, 0x88, 0xba, 0x76, 0xb0, 0xed, 0xe3, 0xe7, 0xd0, 0x4d, 0xd7, 0x35, 0x61, 0x0f, 0xfc, 0xe4,
-	0xfd, 0x64, 0xfc, 0xa1, 0xdf, 0xc1, 0x4b, 0x08, 0x1f, 0x66, 0xd3, 0xf4, 0xe3, 0x64, 0xc8, 0xfa,
-	0x8e, 0x19, 0x8c, 0x66, 0xc3, 0x69, 0xda, 0x77, 0xe3, 0x1e, 0x3c, 0x62, 0xf4, 0x7d, 0x49, 0x4a,
-	0xc7, 0xbf, 0x1c, 0x08, 0x19, 0xa9, 0x5a, 0x54, 0x8a, 0xf0, 0x15, 0x84, 0xbc, 0x7d, 0xa9, 0x7d,
-	0xe1, 0xc5, 0x5d, 0x74, 0x7b, 0xb0, 0xe3, 0x66, 0x13, 0xb6, 0x65, 0xe2, 0x6b, 0x80, 0xb6, 0xe6,
-	0xa4, 0x22, 0x77, 0xe0, 0x9d, 0xd5, 0xed, 0x70, 0xf1, 0x05, 0x04, 0x24, 0xa5, 0x90, 0x2a, 0xf2,
-	0xac, 0xea, 0xfa, 0x50, 0x35, 0x34, 0x53, 0xd6, 0x92, 0xe2, 0x39, 0xf8, 0xa9, 0xf8, 0x46, 0x95,
-	0x71, 0x47, 0x9b, 0xa2, 0xb5, 0xb1, 0x69, 0x0c, 0xba, 0xca, 0x4a, 0x5e, 0x58, 0x23, 0x43, 0xd6,
-	0x34, 0xff, 0x7a, 0xc7, 0x3d, 0xf8, 0x16, 0x30, 0xa9, 0xe4, 0xa2, 0x20, 0x7b, 0x85, 0xcf, 0x6c,
-	0x8d, 0x03, 0xb8, 0x28, 0x48, 0xe5, 0x92, 0xd7, 0x46, 0xd9, 0x06, 0xb6, 0x0b, 0xdd, 0xfd, 0x76,
-	0xe1, 0x7a, 0xbc, 0x77, 0xfe, 0x94, 0xe4, 0x8a, 0xe7, 0x84, 0x6f, 0x21, 0x78, 0x90, 0x94, 0x69,
-	0xc2, 0x93, 0xde, 0xdc, 0x1c, 0x4d, 0x36, 0xc9, 0xc4, 0x1d, 0x7c, 0x03, 0xde, 0x88, 0xf4, 0x7f,
-	0x8a, 0xef, 0x21, 0x18, 0x91, 0x4e, 0xca, 0x12, 0x9f, 0x1e, 0xb3, 0xec, 0x87, 0x70, 0x56, 0x9e,
-	0xc0, 0x65, 0xb2, 0xd4, 0x5f, 0xcd, 0x38, 0x3f, 0xbf, 0xc1, 0x91, 0xbb, 0x36, 0xb0, 0xb8, 0x83,
-	0xef, 0xe0, 0xf1, 0x27, 0x93, 0x47, 0xa6, 0xa9, 0xc9, 0xf0, 0xef, 0xcc, 0x93, 0x07, 0xcc, 0x03,
-	0xfb, 0x77, 0xbd, 0xfc, 0x13, 0x00, 0x00, 0xff, 0xff, 0x55, 0x5d, 0x17, 0xba, 0x75, 0x03, 0x00,
-	0x00,
+	// 231 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0xc9, 0x4c, 0x49, 0xcd,
+	0x2b, 0xc9, 0x4c, 0xcb, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9,
+	0x17, 0x62, 0xc9, 0x4d, 0xcc, 0xcc, 0x53, 0x92, 0xe1, 0xe2, 0x72, 0x4f, 0x2d, 0x09, 0x4a, 0x2d,
+	0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0xe2, 0xe3, 0x62, 0xca, 0x4c, 0x91, 0x60, 0x54, 0x60, 0xd4, 0xe0,
+	0x0c, 0x62, 0xca, 0x4c, 0x51, 0x9a, 0xc0, 0xc8, 0xc5, 0xe1, 0x09, 0xd6, 0x5c, 0x52, 0x29, 0x24,
+	0xc4, 0xc5, 0x92, 0x5e, 0x0a, 0x97, 0x06, 0xb3, 0x41, 0x62, 0x79, 0x89, 0xb9, 0xa9, 0x12, 0x4c,
+	0x10, 0x31, 0x10, 0x5b, 0x48, 0x84, 0x8b, 0x35, 0x35, 0x37, 0x31, 0x33, 0x47, 0x82, 0x19, 0x2c,
+	0x08, 0xe1, 0x08, 0x49, 0x71, 0x71, 0x14, 0x24, 0x16, 0x17, 0x97, 0xe7, 0x17, 0xa5, 0x48, 0xb0,
+	0x80, 0x25, 0xe0, 0x7c, 0x25, 0x2d, 0x2e, 0x96, 0x90, 0xca, 0x82, 0x54, 0x21, 0x4e, 0x2e, 0x56,
+	0x47, 0x17, 0x5f, 0x4f, 0x3f, 0x01, 0x06, 0x21, 0x1e, 0x2e, 0x0e, 0xe7, 0xd0, 0xe0, 0x10, 0x7f,
+	0x5f, 0xd7, 0x20, 0x01, 0x46, 0x90, 0x84, 0x7b, 0xa8, 0x6b, 0x70, 0x88, 0x00, 0x93, 0x91, 0x13,
+	0x97, 0xa8, 0x27, 0x8a, 0x77, 0x82, 0x53, 0x8b, 0xca, 0x32, 0x93, 0x53, 0x85, 0x34, 0xb9, 0x98,
+	0xdd, 0x53, 0x4b, 0x84, 0x04, 0xf4, 0x40, 0xfe, 0xd2, 0x43, 0x78, 0x4a, 0x8a, 0x0f, 0x22, 0x02,
+	0xf3, 0x87, 0x12, 0x43, 0x12, 0x1b, 0x38, 0x04, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xec,
+	0x39, 0x53, 0x62, 0x19, 0x01, 0x00, 0x00,
 }

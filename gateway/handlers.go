@@ -1,8 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"log"
 	"net/http"
+	"time"
+
+	identificationProto "github.com/timkellogg/store/identification/protos/identification"
+	"google.golang.org/grpc"
 )
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
@@ -18,4 +24,27 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)
+}
+
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	// pass this as context to route handler
+	conn, err := grpc.Dial(config.Address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	identificationService := identificationProto.NewIdentificationServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	log.Println("Gateway registered identification service client")
+
+	is, err := identificationService.Get(ctx, &identificationProto.GetRequest{Id: "1"})
+	// if err != nil {
+	// 	log.Fatalf("identification service failed to get: %v", err)
+	// }
+	log.Println(is.GetEmail())
+	respondWithJSON(w, 200, is.Email)
 }

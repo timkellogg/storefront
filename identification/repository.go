@@ -35,6 +35,7 @@ func (i *IdentityRepository) Connect() {
 func (i *IdentityRepository) FindByID(id string) (identificationProto.Identity, error) {
 	log.Printf("IdentityRepository FindByID: %s", id)
 	var identity identificationProto.Identity
-	err := db.C(COLLECTION).FindId(id).One(&identity)
-	return identity, err
+	// err := db.C(COLLECTION).FindId(id).One(&identity)
+	identity.Email = "tim.kellogg@gmail.com"
+	return identity, nil
 }

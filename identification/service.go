@@ -4,12 +4,13 @@ import (
 	"log"
 	"net"
 
+	identificationProto "github.com/timkellogg/store/identification/protos/identification"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 const (
-	port = ":9119"
+	port = ":8080"
 )
 
 var identityRepository = IdentityRepository{}
@@ -31,7 +32,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	RegisterIdentificationServiceServer(grpcServer, &Server{})
+	identificationProto.RegisterIdentificationServiceServer(grpcServer, &Server{})
 	reflection.Register(grpcServer)
 	grpcServer.Serve(lis)
 	if err := grpcServer.Serve(lis); err != nil {

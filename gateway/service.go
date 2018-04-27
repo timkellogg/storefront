@@ -1,16 +1,41 @@
-package gateway
+package main
 
 import (
+	"context"
 	"log"
-	"net/http"
+	"time"
 
-	"github.com/gorilla/mux"
+	identificationProto "github.com/timkellogg/store/identification/protos/identification"
+	"google.golang.org/grpc"
 )
 
+var config = Config{}
+
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", defaultHandler).Methods("GET")
-	if err := http.ListenAndServe(":3000", r); err != nil {
-		log.Fatal(err)
+	config.Read()
+
+	conn, err := grpc.Dial(config.Address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
 	}
+	defer conn.Close()
+
+	identificationService := identificationProto.NewIdentificationServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	r, err := identificationService.Get(ctx, &identificationProto.GetRequest{Id: "1"})
+	if err != nil {
+		log.Fatalf("identification service failed to get: %v", err)
+	}
+
+	log.Print(r)
+	// r := mux.NewRouter("/identification/:id", identificationHandler).Methods("GET")
+
+	// r.HandleFunc("/identifications/", identificationHandler).Methods("GET")
+
+	// if err := http.ListenAndServe(":3000", r); err != nil {
+	// 	log.Fatal(err)
+	// }
 }

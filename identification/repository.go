@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	identificationProto "github.com/timkellogg/store/identification/protos/identification"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -30,8 +31,8 @@ func (i *IdentityRepository) Connect() {
 }
 
 // FindByID - returns a single identity by id
-func (i *IdentityRepository) FindByID(id string) (Identity, error) {
-	var identity Identity
+func (i *IdentityRepository) FindByID(id string) (identificationProto.Identity, error) {
+	var identity identificationProto.Identity
 	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&identity)
 	return identity, err
 }

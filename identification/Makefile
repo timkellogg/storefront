@@ -1,6 +1,5 @@
 build:
-	protoc -I $(GOPATH)/src/github.com/timkellogg/store/identification/ $(GOPATH)/src/github.com/timkellogg/store/identification/identification.proto --go_out=plugins=grpc:.
+	protoc -I $(GOPATH)/src/github.com/timkellogg/store/identification/protos/identification $(GOPATH)/src/github.com/timkellogg/store/identification/protos/identification/identification.proto --go_out=plugins=grpc:protos/identification
 
 clean:
-	rm identification.pb.go
-
+	rm protos/identification/identification.pb.go

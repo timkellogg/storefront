@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package identification;
+package users;
 
-service IdentificationService {
-    rpc Get(GetRequest) returns (Identity) {}
+service UserService {
+    rpc Get(GetRequest) returns (User) {}
     // rpc Create(Identity) returns (Response) {}
     // rpc Get(Identity) returns (Response) {}
     // rpc Authenticate(Identity) returns (Token) {}
@@ -14,7 +14,7 @@ message GetRequest {
     string id = 1;
 }
 
-message Identity {
+message User {
     string guid = 1;
     string name = 2;
     string email = 3;

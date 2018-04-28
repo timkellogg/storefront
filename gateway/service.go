@@ -14,7 +14,8 @@ func main() {
 	config.Read()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", rootHandler)
+	r.HandleFunc("/api/v1/identity/{id}", getIdentityHandler).Methods("GET")
+	r.HandleFunc("/api/v1/identity", createIdentityHandler).Methods("POST")
 
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)

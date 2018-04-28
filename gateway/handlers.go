@@ -26,7 +26,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
+func getIdentityHandler(w http.ResponseWriter, r *http.Request) {
 	// pass this as context to route handler
 	conn, err := grpc.Dial(config.Address, grpc.WithInsecure())
 	if err != nil {
@@ -42,9 +42,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Gateway registered identification service client")
 
 	is, err := identificationService.Get(ctx, &identificationProto.GetRequest{Id: "1"})
-	// if err != nil {
-	// 	log.Fatalf("identification service failed to get: %v", err)
-	// }
-	log.Println(is.GetEmail())
-	respondWithJSON(w, 200, is.Email)
+
+	respondWithJSON(w, 200, map[string]string{"user": is.GetEmail()})
+}
+
+func createIdentityHandler(w http.ResponseWriter, r *http.Request) {
+
 }

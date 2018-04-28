@@ -32,10 +32,16 @@ func (i *IdentityRepository) Connect() {
 }
 
 // FindByID - returns a single identity by id
-func (i *IdentityRepository) FindByID(id string) (identificationProto.Identity, error) {
+func (i *IdentityRepository) FindByID(id string) (*identificationProto.Identity, error) {
 	log.Printf("IdentityRepository FindByID: %s", id)
 	var identity identificationProto.Identity
-	// err := db.C(COLLECTION).FindId(id).One(&identity)
-	identity.Email = "tim.kellogg@gmail.com"
-	return identity, nil
+	err := db.C(COLLECTION).FindId(id).One(&identity)
+	return &identity, err
+}
+
+// Create - saves a new identity
+func (i *IdentityRepository) Create(identity *identificationProto.Identity) (*identificationProto.Identity, error) {
+	log.Printf("IdentityRepository CreateIdentity: %v", identity)
+	err := db.C(COLLECTION).Insert(&identity)
+	return identity, err
 }

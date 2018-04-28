@@ -16,5 +16,14 @@ func (s *Server) Get(ctx context.Context, in *identificationProto.GetRequest) (*
 	if err != nil {
 		log.Println(err)
 	}
-	return &identity, err
+	return identity, err
+}
+
+// Create - saves a new identity
+func (s *Server) Create(ctx context.Context, in *identificationProto.Identity) (*identificationProto.Identity, error) {
+	identity, err := identityRepository.Create(in)
+	if err != nil {
+		log.Println(err)
+	}
+	return identity, err
 }

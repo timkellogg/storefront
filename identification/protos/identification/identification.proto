@@ -4,7 +4,7 @@ package identification;
 
 service IdentificationService {
     rpc Get(GetRequest) returns (Identity) {}
-    // rpc Create(Identity) returns (Response) {}
+    rpc Create(Identity) returns (Identity) {}
     // rpc Get(Identity) returns (Response) {}
     // rpc Authenticate(Identity) returns (Token) {}
     // rpc ValidateToken(Token) returns (Token) {}

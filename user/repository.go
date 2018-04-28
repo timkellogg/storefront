@@ -7,7 +7,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// UserRepository - collection of identities/users
+// UserRepository - collection of users
 type UserRepository struct {
 	Server   string
 	Database string
@@ -15,10 +15,7 @@ type UserRepository struct {
 
 var db *mgo.Database
 
-const (
-	// COLLECTION - resource name
-	COLLECTION = "identities"
-)
+const collection = "users"
 
 // Connect - establish database connection
 func (i *UserRepository) Connect() {
@@ -32,6 +29,6 @@ func (i *UserRepository) Connect() {
 // FindByID - returns a single user by id
 func (i *UserRepository) FindByID(id string) (proto.User, error) {
 	var user proto.User
-	err := db.C(COLLECTION).FindId(id).One(&user)
+	err := db.C(collection).FindId(id).One(&user)
 	return user, err
 }

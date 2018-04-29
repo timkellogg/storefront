@@ -10,10 +10,10 @@ import (
 type Server struct{}
 
 // Get - find user by id
-func (s *Server) Get(ctx context.Context, req *proto.GetRequest, i *proto.User) error {
+func (s *Server) Get(ctx context.Context, req *proto.GetUserRequest, res *proto.User) error {
 	user, err := userRepository.FindByID(req.Id)
-	i.Email = user.Email
-	i.Guid = user.Guid
-	i.Name = user.Name
+	res.Email = user.Email
+	res.Guid = user.Guid
+	res.Name = user.Name
 	return err
 }

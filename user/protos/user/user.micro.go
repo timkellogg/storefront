@@ -2,16 +2,16 @@
 // source: user.proto
 
 /*
-Package users is a generated protocol buffer package.
+Package go_micro_srv_users is a generated protocol buffer package.
 
 It is generated from these files:
 	user.proto
 
 It has these top-level messages:
-	GetRequest
+	GetUserRequest
 	User
 */
-package users
+package go_micro_srv_users
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
@@ -42,7 +42,7 @@ var _ server.Option
 // Client API for UserService service
 
 type UserServiceService interface {
-	Get(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*User, error)
+	Get(ctx context.Context, in *GetUserRequest, opts ...client.CallOption) (*User, error)
 }
 
 type userServiceService struct {
@@ -55,7 +55,7 @@ func UserServiceServiceClient(serviceName string, c client.Client) UserServiceSe
 		c = client.NewClient()
 	}
 	if len(serviceName) == 0 {
-		serviceName = "users"
+		serviceName = "go.micro.srv.users"
 	}
 	return &userServiceService{
 		c:           c,
@@ -63,7 +63,7 @@ func UserServiceServiceClient(serviceName string, c client.Client) UserServiceSe
 	}
 }
 
-func (c *userServiceService) Get(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*User, error) {
+func (c *userServiceService) Get(ctx context.Context, in *GetUserRequest, opts ...client.CallOption) (*User, error) {
 	req := c.c.NewRequest(c.serviceName, "UserService.Get", in)
 	out := new(User)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -76,7 +76,7 @@ func (c *userServiceService) Get(ctx context.Context, in *GetRequest, opts ...cl
 // Server API for UserService service
 
 type UserServiceHandler interface {
-	Get(context.Context, *GetRequest, *User) error
+	Get(context.Context, *GetUserRequest, *User) error
 }
 
 func RegisterUserServiceHandler(s server.Server, hdlr UserServiceHandler, opts ...server.HandlerOption) {
@@ -87,6 +87,6 @@ type UserService struct {
 	UserServiceHandler
 }
 
-func (h *UserService) Get(ctx context.Context, in *GetRequest, out *User) error {
+func (h *UserService) Get(ctx context.Context, in *GetUserRequest, out *User) error {
 	return h.UserServiceHandler.Get(ctx, in, out)
 }

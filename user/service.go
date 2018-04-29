@@ -21,13 +21,14 @@ func init() {
 
 func main() {
 	service := micro.NewService(
-		micro.Name("user.service"),
+		micro.Name("go.micro.srv.user"),
+		micro.Version("0.0.1"),
 		micro.RegisterTTL(time.Second*30),
 	)
 
 	service.Init()
 
-	proto.RegisterUsersServiceHandler(service.Server(), new(Server))
+	proto.RegisterUserServiceHandler(service.Server(), new(Server))
 
 	if err := service.Run(); err != nil {
 		log.Fatal(err)

@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"time"
 
-	web "github.com/micro/go-web"
+	"github.com/gorilla/mux"
+	micro "github.com/micro/go-micro"
 )
 
 var config = Config{}
@@ -12,24 +14,21 @@ var config = Config{}
 func main() {
 	config.Read()
 
-	// service := micro.NewService(
-	// 	micro.Name("go.micro.api"),
-	// 	micro.Version("0.0.1"),
-	// )
+	api := new(API)
+	router := mux.NewRouter().StrictSlash(true)
 
-	// accountProto.RegisterAccountServiceHandler(service.Server(), new(API))
-
-	service := web.NewService(
-		web.Name("go.micro.api"),
-		web.Version("0.0.1"),
-		web.RegisterTTL(time.Second*30),
+	service := micro.NewService(
+		micro.Name("go.micro.api"),
+		micro.Version("0.0.1"),
+		micro.RegisterTTL(time.Second*30),
 	)
 
 	service.Init()
 
-	service.HandleFunc("/accounts/{accountID}", getAccountHandler)
+	router.HandleFunc("/accounts/{accountID}", api.getAccountHandler).Methods("GET")
 
-	if err := service.Run(); err != nil {
+	err := http.ListenAndServe(config.Address, router)
+	if err != nil {
 		log.Fatal(err)
 	}
 }

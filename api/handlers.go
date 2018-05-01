@@ -29,11 +29,12 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 // API - application struct that implements RPC calls
 type API struct{}
 
-func getAccountHandler(w http.ResponseWriter, r *http.Request) {
+func (a *API) getAccountHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("asdf")
 	vars := mux.Vars(r)
 	accountID := vars["accountID"]
 
-	accountService := accountProto.AccountsServiceClient("go.micro.account.client", client.DefaultClient)
+	accountService := accountProto.AccountsServiceClient("go.micro.srv.accounts", client.DefaultClient)
 	account, err := accountService.GetAccount(context.Background(), &accountProto.GetAccountRequest{Id: accountID})
 	if err != nil {
 		log.Println(err)

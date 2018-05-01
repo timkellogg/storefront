@@ -21,7 +21,7 @@ func init() {
 
 func main() {
 	service := micro.NewService(
-		micro.Name("go.micro.srv.account"),
+		micro.Name("go.micro.srv.accounts"),
 		micro.Version("0.0.1"),
 		micro.RegisterTTL(time.Second*30),
 	)

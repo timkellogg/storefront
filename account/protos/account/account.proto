@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.srv.users;
+package go.micro.srv.accounts;
 
 service Accounts {
     rpc GetAccount(GetAccountRequest) returns (Account) {}

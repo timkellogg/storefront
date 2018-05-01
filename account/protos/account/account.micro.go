@@ -2,7 +2,7 @@
 // source: account.proto
 
 /*
-Package go_micro_srv_users is a generated protocol buffer package.
+Package go_micro_srv_accounts is a generated protocol buffer package.
 
 It is generated from these files:
 	account.proto
@@ -11,7 +11,7 @@ It has these top-level messages:
 	GetAccountRequest
 	Account
 */
-package go_micro_srv_users
+package go_micro_srv_accounts
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
@@ -55,7 +55,7 @@ func AccountsServiceClient(serviceName string, c client.Client) AccountsService 
 		c = client.NewClient()
 	}
 	if len(serviceName) == 0 {
-		serviceName = "go.micro.srv.users"
+		serviceName = "go.micro.srv.accounts"
 	}
 	return &accountsService{
 		c:           c,

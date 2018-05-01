@@ -2,19 +2,19 @@ syntax = "proto3";
 
 package go.micro.srv.users;
 
-service UserService {
-    rpc Get(GetUserRequest) returns (User) {}
+service Accounts {
+    rpc GetAccount(GetAccountRequest) returns (Account) {}
     // rpc Create(Identity) returns (Response) {}
     // rpc Get(Identity) returns (Response) {}
     // rpc Authenticate(Identity) returns (Token) {}
     // rpc ValidateToken(Token) returns (Token) {}
 }
 
-message GetUserRequest {
+message GetAccountRequest {
     string id = 1;
 }
 
-message User {
+message Account {
     string guid = 1;
     string name = 2;
     string email = 3;
@@ -25,3 +25,4 @@ message User {
         GUEST = 2;
     }
 }
+

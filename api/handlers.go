@@ -3,7 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/micro/go-micro/client"
+	accountProto "github.com/timkellogg/store/account/protos/account"
 )
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,17 +26,23 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
+// API - application struct that implements RPC calls
 type API struct{}
 
-// // Get - find user by id
-// func (s *Server) Get(ctx context.Context, req *proto.GetUserRequest, res *proto.User) error {
-// 	user, err := userRepository.FindByID(req.Id)
-// 	res.Email = user.Email
-// 	res.Guid = user.Guid
-// 	res.Name = user.Name
-// 	return err
-// }
+func getAccountHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	accountID := vars["accountID"]
 
-func (a *API) Call(ctx context.Context, req *api.Request) {
+	accountService := accountProto.AccountsServiceClient("go.micro.account.client", client.DefaultClient)
+	account, err := accountService.GetAccount(context.Background(), &accountProto.GetAccountRequest{Id: accountID})
+	if err != nil {
+		log.Println(err)
+	}
 
+	response, err := json.Marshal(account)
+	if err != nil {
+		log.Println(err)
+	}
+
+	respondWithJSON(w, http.StatusOK, map[string]string{"account": string(response)})
 }

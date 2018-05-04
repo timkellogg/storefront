@@ -9,6 +9,7 @@ import (
 // Config - represents options present in config.toml
 type Config struct {
 	Address string
+	Version string
 }
 
 // Read and parse the configuration file

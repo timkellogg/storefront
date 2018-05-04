@@ -18,17 +18,24 @@ var db *mgo.Database
 const collection = "accounts"
 
 // Connect - establish database connection
-func (i *AccountRepository) Connect() {
-	session, err := mgo.Dial(i.Server)
+func (a *AccountRepository) Connect() {
+	session, err := mgo.Dial(a.Server)
 	if err != nil {
 		log.Fatal(err)
 	}
-	db = session.DB(i.Database)
+	defer session.Close()
+	db = session.DB(a.Database)
 }
 
 // FindByID - returns a single account by id
-func (i *AccountRepository) FindByID(id string) (proto.Account, error) {
+func (a *AccountRepository) FindByID(id string) (proto.Account, error) {
 	var account proto.Account
 	err := db.C(collection).FindId(id).One(&account)
 	return account, err
+}
+
+// Insert - add a record to the database
+func (a *AccountRepository) Insert(account *proto.Account) error {
+	err := db.C(collection).Insert(&account)
+	return err
 }

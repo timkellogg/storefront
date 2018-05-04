@@ -4,7 +4,7 @@ package go.micro.srv.accounts;
 
 service Accounts {
     rpc GetAccount(GetAccountRequest) returns (Account) {}
-    // rpc Create(Identity) returns (Response) {}
+    rpc CreateAccount(Account) returns (Account) {}
     // rpc Get(Identity) returns (Response) {}
     // rpc Authenticate(Identity) returns (Token) {}
     // rpc ValidateToken(Token) returns (Token) {}

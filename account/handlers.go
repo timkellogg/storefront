@@ -17,3 +17,10 @@ func (s *Server) GetAccount(ctx context.Context, req *proto.GetAccountRequest, r
 	res.Name = account.Name
 	return err
 }
+
+// CreateAccount - persist account to the database
+func (s *Server) CreateAccount(ctx context.Context, req *proto.Account, res *proto.Account) error {
+	// validate
+	err := accountRepository.Insert(req)
+	return err
+}

@@ -43,6 +43,7 @@ var _ server.Option
 
 type AccountsService interface {
 	GetAccount(ctx context.Context, in *GetAccountRequest, opts ...client.CallOption) (*Account, error)
+	CreateAccount(ctx context.Context, in *Account, opts ...client.CallOption) (*Account, error)
 }
 
 type accountsService struct {
@@ -73,10 +74,21 @@ func (c *accountsService) GetAccount(ctx context.Context, in *GetAccountRequest,
 	return out, nil
 }
 
+func (c *accountsService) CreateAccount(ctx context.Context, in *Account, opts ...client.CallOption) (*Account, error) {
+	req := c.c.NewRequest(c.serviceName, "Accounts.CreateAccount", in)
+	out := new(Account)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Accounts service
 
 type AccountsHandler interface {
 	GetAccount(context.Context, *GetAccountRequest, *Account) error
+	CreateAccount(context.Context, *Account, *Account) error
 }
 
 func RegisterAccountsHandler(s server.Server, hdlr AccountsHandler, opts ...server.HandlerOption) {
@@ -89,4 +101,8 @@ type Accounts struct {
 
 func (h *Accounts) GetAccount(ctx context.Context, in *GetAccountRequest, out *Account) error {
 	return h.AccountsHandler.GetAccount(ctx, in, out)
+}
+
+func (h *Accounts) CreateAccount(ctx context.Context, in *Account, out *Account) error {
+	return h.AccountsHandler.CreateAccount(ctx, in, out)
 }

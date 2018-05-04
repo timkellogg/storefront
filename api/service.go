@@ -25,8 +25,10 @@ func main() {
 
 	service.Init()
 
-	router.HandleFunc("/accounts/{accountID}", api.getAccountHandler).Methods("GET")
+	router.HandleFunc("/api/v"+config.Version+"/accounts/{accountID}", api.getAccountHandler).Methods("GET")
+	router.HandleFunc("/api/v"+config.Version+"/accounts/", api.createAccountHandler).Methods("POST")
 
+	log.Printf("API listening on %s\n", config.Address)
 	err := http.ListenAndServe(config.Address, router)
 	if err != nil {
 		log.Fatal(err)

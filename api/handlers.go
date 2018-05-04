@@ -11,26 +11,11 @@ import (
 	accountProto "github.com/timkellogg/store/account/protos/account"
 )
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
-}
-
-func respondWithError(w http.ResponseWriter, code int, msg string) {
-	respondWithJSON(w, code, map[string]string{"error": msg})
-}
-
-func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
-}
-
 // API - application struct that implements RPC calls
 type API struct{}
 
+// getAccountHandler - returns user account information
 func (a *API) getAccountHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("asdf")
 	vars := mux.Vars(r)
 	accountID := vars["accountID"]
 
@@ -46,4 +31,23 @@ func (a *API) getAccountHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]string{"account": string(response)})
+}
+
+// createAccountHandler - builds user account
+func (a *API) createAccountHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	password := r.Form.Get("password")
+	email := r.Form.Get("email")
+	name := r.Form.Get("name")
+
+	account := accountProto.Account{Password: password, Email: email, Name: name}
+
+	accountService := accountProto.AccountsServiceClient("go.micro.srv.accounts", client.DefaultClient)
+	_, err := accountService.CreateAccount(context.Background(), &account)
+	if err != nil {
+		log.Println(err)
+	}
+
+	respondWithJSON(w, http.StatusCreated, map[string]string{})
 }
